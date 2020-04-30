@@ -12,7 +12,12 @@ class HomeBody extends StatefulWidget {
 }
 
 class _HomeBodyState extends State<HomeBody> {
-  int likedCount = 0;
+  int likedCount = -1;
+
+  String caption = '''Styling text in Flutter 
+      #something, #Another, #nepal,
+       #ktm, #love, #newExperiance
+       Styling text in Flutter''';
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +38,8 @@ class _HomeBodyState extends State<HomeBody> {
 
   Widget post(int index) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Row(
           children: <Widget>[
@@ -85,13 +92,19 @@ class _HomeBodyState extends State<HomeBody> {
           children: <Widget>[
             SizedBox(width: 12.0),
             Stack(
+              fit: StackFit.loose,
               textDirection: TextDirection.rtl,
               children: <Widget>[
                 ...UiImage.storiesList.take(3).map((image) {
+                  if (likedCount == 2)
+                    likedCount = 0;
+                  else
+                    likedCount++;
+
                   return Container(
                     height: 22.0,
                     width: 22.0,
-                    margin: EdgeInsets.only(right: ++likedCount * 14.0),
+                    margin: EdgeInsets.only(right: likedCount * 14.0),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
@@ -108,6 +121,7 @@ class _HomeBodyState extends State<HomeBody> {
                 }),
               ],
             ),
+            SizedBox(width: 8.0),
             Expanded(
               child: RichText(
                 text: TextSpan(
@@ -144,10 +158,39 @@ class _HomeBodyState extends State<HomeBody> {
             )
           ],
         ),
-        Text('Data'),
-        Text('Data'),
-        Row(),
-        Text('Data'),
+        SizedBox(height: 8.0),
+        Padding(
+          padding: const EdgeInsets.only(left: 12.0),
+          child: Text('Data'),
+        ),
+        SizedBox(height: 4.0),
+        Padding(
+          padding: const EdgeInsets.only(left: 12.0),
+          child: Text(
+            'View all 40 comments',
+            style: TextStyle(color: Colors.black45),
+          ),
+        ),
+        SizedBox(height: 4.0),
+        Padding(
+          padding: const EdgeInsets.only(left: 12.0),
+          child: Row(),
+        ),
+        SizedBox(
+          height: 4.0,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 12.0),
+          child: Text(
+            '1 hour ago',
+            style: TextStyle(
+              color: Colors.black45,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 24.0,
+        ),
       ],
     );
   }
