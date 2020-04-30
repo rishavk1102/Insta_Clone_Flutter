@@ -72,9 +72,9 @@ flutter:
       fonts:
         - asset: assets/fonts/Billabong.ttf
           style: italic
-    - family: HomeFilled
+    - family: CustomIcons
       fonts:
-        - asset: assets/fonts/HomeFilled.ttf      
+        - asset: assets/fonts/CustomIcons.ttf      
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
