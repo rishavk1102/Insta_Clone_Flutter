@@ -40,4 +40,10 @@ class CustomIcons {
       const IconData(0xe80a, fontFamily: _kFontFam);
   static const IconData search_lineal =
       const IconData(0xe80b, fontFamily: _kFontFam);
+  static const IconData bookmark_lineal =
+      const IconData(0xe80c, fontFamily: _kFontFam);
+  static const IconData bookmark_fill =
+      const IconData(0xe80d, fontFamily: _kFontFam);
+  static const IconData comment = 
+      const IconData(0xe80e, fontFamily: _kFontFam);
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../utils/ui_image.dart';
+import './circle_image.dart';
 
 class Stories extends StatelessWidget {
   @override
@@ -22,7 +22,11 @@ class Stories extends StatelessWidget {
   Widget story(int index) {
     return Column(
       children: <Widget>[
-        index == 0 ? createStory() : storyContent(index),
+        index == 0
+            ? createStory()
+            : CircleImage(
+                UiImage.storiesList[index],
+              ),
         Expanded(
           child: Text(
             index == 0 ? 'Your Story' : UiImage.storiesName[index],
@@ -77,47 +81,6 @@ class Stories extends StatelessWidget {
           ),
         )
       ],
-    );
-  }
-
-  Widget storyContent(int index) {
-    return Container(
-      height: 90.0,
-      width: 90.0,
-      margin: EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: SweepGradient(
-          colors: [
-            Colors.cyan,
-            Colors.red,
-            Colors.amber,
-            Colors.grey,
-            Colors.green,
-          ],
-        ),
-      ),
-      child: Container(
-        margin: EdgeInsets.all(3.0),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
-        ),
-        child: FittedBox(
-          child: Container(
-            margin: EdgeInsets.all(4.0),
-            height: 90.0,
-            width: 90.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: AssetImage(UiImage.storiesList[index]),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
