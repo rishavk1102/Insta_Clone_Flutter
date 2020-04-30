@@ -7,7 +7,15 @@ class Stories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 140,
+      height: 120,
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey[200],
+            width: 1.0,
+          ),
+        ),
+      ),
       child: ListView.builder(
         itemCount: UiImage.storiesList.length,
         scrollDirection: Axis.horizontal,
@@ -21,6 +29,8 @@ class Stories extends StatelessWidget {
 
   Widget story(int index) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         index == 0
             ? createStory()
@@ -43,9 +53,14 @@ class Stories extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Container(
-          height: 90.0,
-          width: 90.0,
-          margin: EdgeInsets.all(8.0),
+          height: 62.0,
+          width: 62.0,
+          margin: EdgeInsets.only(
+            left: 12.0,
+            top: 14.0,
+            right: 16.0,
+            bottom: 10.0,
+          ),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             image: DecorationImage(
@@ -58,9 +73,9 @@ class Stories extends StatelessWidget {
         ),
         Positioned(
           bottom: 4.0,
-          right: 2.0,
-          height: 28.0,
-          width: 28.0,
+          right: 8.0,
+          height: 24.0,
+          width: 24.0,
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -69,7 +84,7 @@ class Stories extends StatelessWidget {
             child: Container(
               margin: EdgeInsets.all(2.0),
               decoration: BoxDecoration(
-                color: Colors.blueAccent,
+                color: Colors.lightBlue,
                 shape: BoxShape.circle,
               ),
               child: Icon(

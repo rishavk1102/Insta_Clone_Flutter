@@ -8,9 +8,9 @@ class CircleImage extends StatelessWidget {
 
   CircleImage(
     this.image, {
-    this.imageSize,
-    this.whiteMargin,
-    this.imageMargin,
+    this.imageSize = 70.0,
+    this.whiteMargin = 2.5,
+    this.imageMargin = 4.0,
   });
 
   @override

@@ -65,7 +65,14 @@ class _HomeBodyState extends State<HomeBody> {
             maxWidth: double.infinity,
             minWidth: double.infinity,
           ),
-          decoration: BoxDecoration(color: Colors.grey[200]),
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(
+                color: Colors.grey[200],
+                width: 1.0,
+              ),
+            ),
+          ),
           child: Image.asset(UiImage.storiesList[index]),
         ),
         SizedBox(height: 8.0),
@@ -82,6 +89,7 @@ class _HomeBodyState extends State<HomeBody> {
             ),
             Expanded(child: SizedBox()),
             Icon(CustomIcons.bookmark_lineal),
+            SizedBox(width: 10.0),
           ],
         ),
         SizedBox(height: 10.0),
@@ -209,18 +217,21 @@ class _HomeBodyState extends State<HomeBody> {
             ),
             Text(
               '🤗',
-              style: TextStyle(fontSize: 12.0),
+              style: TextStyle(fontSize: 14.0),
             ),
-            SizedBox(width: 8.0),
+            SizedBox(width: 10.0),
             Text(
               '😘',
-              style: TextStyle(fontSize: 12.0),
+              style: TextStyle(fontSize: 14.0),
             ),
-            SizedBox(width: 8.0),
-            Icon(
-              Icons.add_circle_outline,
-              size: 15.0,
-              color: Colors.black26,
+            SizedBox(width: 10.0),
+            Padding(
+              padding: const EdgeInsets.only(top: 4.0),
+              child: Icon(
+                Icons.add_circle_outline,
+                size: 15.0,
+                color: Colors.black26,
+              ),
             ),
             SizedBox(width: 12.0),
           ],
