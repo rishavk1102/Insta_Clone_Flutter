@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../utils/ui_image.dart';
 import './circle_image.dart';
 
-class Stories extends StatelessWidget {
+class Story extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(

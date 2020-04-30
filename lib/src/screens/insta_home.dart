@@ -1,37 +1,40 @@
 import 'package:flutter/material.dart';
 
 import '../custom_icons/custom_icons.dart';
-import '../widgets/bottom_navigation_bar.dart';
-import '../widgets/home_body.dart';
+import '../widgets/insta_home_bottom_navigation_bar.dart';
+import '../widgets/insta_home_body.dart';
 
-class HomeScreen extends StatefulWidget {
+class InstaHome extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _InstaHomeState createState() => _InstaHomeState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _InstaHomeState extends State<InstaHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: buildAppBar(),
-      body: HomeBody(),
-      bottomNavigationBar: BottomNavigationbar(),
+      appBar: AppBar(
+        leading: leading(),
+        title: title(),
+        titleSpacing: 8.0,
+        actions: actions(),
+      ),
+      body: InstaHomeBody(),
+      bottomNavigationBar: InstaHomeBottomNavigationbar(),
     );
   }
 
-  Widget buildAppBar() {
-    return AppBar(
-      leading: IconButton(
+  Widget leading() => IconButton(
         icon: Icon(
           CustomIcons.photo_camera,
           size: 32.0,
           color: Colors.black,
         ),
         onPressed: () {},
-      ),
-      titleSpacing: 8.0,
-      title: Padding(
+      );
+
+  Widget title() => Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: Text(
           'Instagram',
@@ -40,8 +43,9 @@ class _HomeScreenState extends State<HomeScreen> {
             fontSize: 32.0,
           ),
         ),
-      ),
-      actions: <Widget>[
+      );
+
+  List<Widget> actions() => <Widget>[
         IconButton(
           icon: Icon(
             CustomIcons.igtv,
@@ -60,7 +64,5 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         SizedBox(width: 12.0),
-      ],
-    );
-  }
+      ];
 }
