@@ -12,13 +12,6 @@ class HomeBody extends StatefulWidget {
 }
 
 class _HomeBodyState extends State<HomeBody> {
-  int likedCount = -1;
-
-  String caption = '''Styling text in Flutter 
-      #something, #Another, #nepal,
-       #ktm, #love, #newExperiance
-       Styling text in Flutter''';
-
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -37,6 +30,12 @@ class _HomeBodyState extends State<HomeBody> {
   }
 
   Widget post(int index) {
+    int likedCount = -1;
+    String caption =
+        '''Styling text in Flutter #something, Styling text in Flutter. #Another, #nepal, Styling text in Flutter. #ktm, #love, #newExperiance Styling text in Flutter. Styling text in Flutter. Styling text in Flutter.''';
+
+    _processCaption(caption, '#', null);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -61,7 +60,7 @@ class _HomeBodyState extends State<HomeBody> {
         ),
         Container(
           constraints: BoxConstraints(
-            maxHeight: 2400.0,
+            maxHeight: 400.0,
             minHeight: 200.0,
             maxWidth: double.infinity,
             minWidth: double.infinity,
@@ -69,9 +68,7 @@ class _HomeBodyState extends State<HomeBody> {
           decoration: BoxDecoration(color: Colors.grey[200]),
           child: Image.asset(UiImage.storiesList[index]),
         ),
-        SizedBox(
-          height: 8.0,
-        ),
+        SizedBox(height: 8.0),
         Row(
           children: <Widget>[
             SizedBox(width: 12.0),
@@ -160,8 +157,30 @@ class _HomeBodyState extends State<HomeBody> {
         ),
         SizedBox(height: 8.0),
         Padding(
-          padding: const EdgeInsets.only(left: 12.0),
-          child: Text('Data'),
+          padding: const EdgeInsets.only(left: 12.0, right: 16.0),
+          child: RichText(
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            text: TextSpan(
+              style: TextStyle(
+                color: Colors.black,
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                  text: '_rishavk1102_',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                ..._processCaption(
+                  caption,
+                  '#',
+                  TextStyle(color: Colors.blue),
+                ),
+              ],
+            ),
+          ),
         ),
         SizedBox(height: 4.0),
         Padding(
@@ -172,9 +191,39 @@ class _HomeBodyState extends State<HomeBody> {
           ),
         ),
         SizedBox(height: 4.0),
-        Padding(
-          padding: const EdgeInsets.only(left: 12.0),
-          child: Row(),
+        Row(
+          children: <Widget>[
+            CircleImage(
+              UiImage.child,
+              imageSize: 30.0,
+              whiteMargin: 2.0,
+              imageMargin: 6.0,
+            ),
+            Expanded(
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Add a comment...',
+                  border: InputBorder.none,
+                ),
+              ),
+            ),
+            Text(
+              '🤗',
+              style: TextStyle(fontSize: 12.0),
+            ),
+            SizedBox(width: 8.0),
+            Text(
+              '😘',
+              style: TextStyle(fontSize: 12.0),
+            ),
+            SizedBox(width: 8.0),
+            Icon(
+              Icons.add_circle_outline,
+              size: 15.0,
+              color: Colors.black26,
+            ),
+            SizedBox(width: 12.0),
+          ],
         ),
         SizedBox(
           height: 4.0,
@@ -182,7 +231,7 @@ class _HomeBodyState extends State<HomeBody> {
         Padding(
           padding: const EdgeInsets.only(left: 12.0),
           child: Text(
-            '1 hour ago',
+            '1 hour ago ',
             style: TextStyle(
               color: Colors.black45,
             ),
@@ -193,5 +242,23 @@ class _HomeBodyState extends State<HomeBody> {
         ),
       ],
     );
+  }
+
+  List<TextSpan> _processCaption(
+      String caption, String matcher, TextStyle style) {
+    List<TextSpan> spans = [];
+
+    caption.split(' ').forEach((text) {
+      if (text.toString().contains(matcher)) {
+        spans.add(TextSpan(
+          text: text + ' ',
+          style: style,
+        ));
+      } else {
+        spans.add(TextSpan(text: text + ' '));
+      }
+    });
+
+    return spans;
   }
 }
