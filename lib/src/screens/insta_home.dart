@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../custom_icons/custom_icons.dart';
-import '../widgets/insta_home_bottom_navigation_bar.dart';
-import '../widgets/insta_home_body.dart';
+import '../widgets/insta_activities.dart';
+
+import './insta_favourite.dart';
+import './insta_gallery.dart';
+import './insta_profile.dart';
+import './insta_search.dart';
 
 class InstaHome extends StatefulWidget {
   @override
@@ -10,59 +14,74 @@ class InstaHome extends StatefulWidget {
 }
 
 class _InstaHomeState extends State<InstaHome> {
+  int currentIndex = 0;
+
+  List<Widget> _widgetOptions = <Widget>[
+    InstaActivities(),
+    InstaSearch(),
+    InstaGallery(),
+    InstaFavourite(),
+    InstaProfile(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: leading(),
-        title: title(),
-        titleSpacing: 8.0,
-        actions: actions(),
-      ),
-      body: InstaHomeBody(),
-      bottomNavigationBar: InstaHomeBottomNavigationbar(),
+      body: _widgetOptions[currentIndex],
+      bottomNavigationBar: bottomNavBar(),
     );
   }
 
-  Widget leading() => IconButton(
-        icon: Icon(
-          CustomIcons.photo_camera,
-          size: 32.0,
-          color: Colors.black,
-        ),
-        onPressed: () {},
-      );
+  Widget bottomNavBar() {
+    final List<BottomNavigationBarItem> items = [
+      BottomNavigationBarItem(
+        icon: Icon(currentIndex == 0
+            ? CustomIcons.home_filled
+            : CustomIcons.home_lineal),
+        title: Text(''),
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(currentIndex == 1
+            ? CustomIcons.search_fill
+            : CustomIcons.search_lineal),
+        title: Text(''),
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(CustomIcons.add),
+        title: Text(''),
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(currentIndex == 3
+            ? CustomIcons.like_fill
+            : CustomIcons.like_lineal),
+        title: Text(''),
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(currentIndex == 4
+            ? CustomIcons.people_fill
+            : CustomIcons.profile_lineal),
+        title: Text(''),
+      ),
+    ];
 
-  Widget title() => Padding(
-        padding: const EdgeInsets.only(top: 8.0),
-        child: Text(
-          'Instagram',
-          style: TextStyle(
-            fontFamily: 'BillaBong',
-            fontSize: 32.0,
-          ),
-        ),
-      );
-
-  List<Widget> actions() => <Widget>[
-        IconButton(
-          icon: Icon(
-            CustomIcons.igtv,
-            color: Colors.black,
-          ),
-          onPressed: () {},
-        ),
-        Transform.rotate(
-          angle: 0.4,
-          child: IconButton(
-            icon: Icon(
-              CustomIcons.paper_plane,
-              color: Colors.black,
-            ),
-            onPressed: () {},
-          ),
-        ),
-        SizedBox(width: 12.0),
-      ];
+    return BottomNavigationBar(
+      items: items,
+      onTap: (int index) {
+        setState(() {
+          currentIndex = index;
+          print(currentIndex);
+        });
+      },
+      currentIndex: currentIndex,
+      iconSize: 24.0,
+      //showSelectedLabels: false,
+      selectedItemColor: Colors.black,
+      unselectedItemColor: Colors.black,
+      selectedFontSize: 0.0,
+      type: BottomNavigationBarType.fixed,
+      elevation: 18.0,
+      backgroundColor: Colors.white,
+    );
+  }
 }
