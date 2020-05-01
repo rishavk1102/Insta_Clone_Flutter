@@ -4,15 +4,26 @@ import '../custom_icons/custom_icons.dart';
 import '../utils/ui_image.dart';
 import '../widgets/circle_image.dart';
 
-class Post extends StatelessWidget {
+class Post extends StatefulWidget {
   final int index;
+  final List<String> galleryItems;
+
+  Post(
+    this.index,
+    this.galleryItems,
+  );
+
+  @override
+  _PostState createState() => _PostState();
+}
+
+class _PostState extends State<Post> {
+  int pageViewActiveIndex = 0;
 
   int likedCount = -1;
 
   final String caption =
       '''Styling text in Flutter #something, Styling text in Flutter. #Another, #nepal, Styling text in Flutter. #ktm, #love, #newExperiance Styling text in Flutter. Styling text in Flutter. Styling text in Flutter.''';
-
-  Post(this.index);
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +72,7 @@ class Post extends StatelessWidget {
 
   Widget gallery() => Container(
         constraints: BoxConstraints(
-          maxHeight: 400.0,
+          maxHeight: 500.0,
           minHeight: 200.0,
           maxWidth: double.infinity,
           minWidth: double.infinity,
@@ -74,23 +85,72 @@ class Post extends StatelessWidget {
             ),
           ),
         ),
-        child: Image.asset(UiImage.storiesList[index]),
+        child: widget.galleryItems.length > 1
+            ? galleryPageView()
+            : Image.asset(
+                UiImage.storiesList[widget.index],
+                fit: BoxFit.contain,
+              ),
       );
 
-  Widget actions() => Row(
+  Widget galleryPageView() {
+    return PageView.builder(
+      itemCount: widget.galleryItems.length,
+      onPageChanged: (currentIndex) {
+        setState(() {
+          this.pageViewActiveIndex = currentIndex;
+        });
+        print('Current index $currentIndex : index : ${widget.index}');
+      },
+      itemBuilder: (BuildContext context, int index) {
+        return Image.asset(
+          widget.galleryItems[index],
+          fit: BoxFit.cover,
+        );
+      },
+    );
+  }
+
+  Widget actions() => Stack(
+        alignment: Alignment.center,
         children: <Widget>[
-          SizedBox(width: 12.0),
-          Icon(CustomIcons.like_lineal),
-          SizedBox(width: 16.0),
-          Icon(CustomIcons.comment),
-          SizedBox(width: 16.0),
-          Transform.rotate(
-            angle: 0.4,
-            child: Icon(CustomIcons.paper_plane),
+          Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ...widget.galleryItems.map((s) {
+                  return Container(
+                    margin: EdgeInsets.only(right: 4.0),
+                    height: widget.galleryItems.length <= 1 ? 0.0 : 6.0,
+                    width: widget.galleryItems.length <= 1 ? 0.0 : 6.0,
+                    decoration: BoxDecoration(
+                      color:
+                          pageViewActiveIndex == widget.galleryItems.indexOf(s)
+                              ? Colors.blueAccent
+                              : Colors.grey[300],
+                      shape: BoxShape.circle,
+                    ),
+                  );
+                }),
+              ],
+            ),
           ),
-          Expanded(child: SizedBox()),
-          Icon(CustomIcons.bookmark_lineal),
-          SizedBox(width: 10.0),
+          Row(
+            children: <Widget>[
+              SizedBox(width: 12.0),
+              Icon(CustomIcons.like_lineal),
+              SizedBox(width: 16.0),
+              Icon(CustomIcons.comment),
+              SizedBox(width: 16.0),
+              Transform.rotate(
+                angle: 0.4,
+                child: Icon(CustomIcons.paper_plane),
+              ),
+              Expanded(child: SizedBox()),
+              Icon(CustomIcons.bookmark_lineal),
+              SizedBox(width: 10.0),
+            ],
+          ),
         ],
       );
 
@@ -264,5 +324,9 @@ class Post extends StatelessWidget {
     });
 
     return spans;
+  }
+
+  List<Widget> sliderIndicator(int totalItem, int currentItem) {
+    return null;
   }
 }

@@ -14,12 +14,12 @@ class _InstaHomeBodyState extends State<InstaHomeBody> {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       child: ListView.builder(
-        itemCount: UiImage.storiesList.length,
+        itemCount: UiImage.postList.length + 1,
         itemBuilder: (BuildContext context, int index) {
           if (index == 0) {
             return Story();
           } else {
-            return Post(index);
+            return Post(index - 1, UiImage.postList[index - 1]);
           }
         },
       ),
