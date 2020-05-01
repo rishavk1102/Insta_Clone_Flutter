@@ -11,18 +11,23 @@ class InstaHomeBody extends StatefulWidget {
 }
 
 class _InstaHomeBodyState extends State<InstaHomeBody> {
+  var listContent = UiImage.postList;
+
   @override
   Widget build(BuildContext context) {
+    listContent.insert(0, []);
+    listContent.insert(2, []);
+
     return RefreshIndicator(
       child: ListView.builder(
-        itemCount: UiImage.postList.length + 2,
+        itemCount: listContent.length,
         itemBuilder: (BuildContext context, int index) {
           if (index == 0) {
             return Story();
           } else if (index == 2) {
             return FriendSuggestion();
           } else {
-            return Post(index - 1, UiImage.postList[index - 1]);
+            return Post(UiImage.postList[index]);
           }
         },
       ),

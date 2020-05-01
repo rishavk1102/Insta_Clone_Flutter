@@ -5,13 +5,9 @@ import '../utils/ui_image.dart';
 import '../widgets/circle_image.dart';
 
 class Post extends StatefulWidget {
-  final int index;
   final List<String> galleryItems;
 
-  Post(
-    this.index,
-    this.galleryItems,
-  );
+  Post(this.galleryItems);
 
   @override
   _PostState createState() => _PostState();
@@ -88,7 +84,7 @@ class _PostState extends State<Post> {
         child: widget.galleryItems.length > 1
             ? galleryPageView()
             : Image.asset(
-                UiImage.storiesList[widget.index],
+                widget.galleryItems[0],
                 fit: BoxFit.contain,
               ),
       );
@@ -100,7 +96,6 @@ class _PostState extends State<Post> {
         setState(() {
           this.pageViewActiveIndex = currentIndex;
         });
-        print('Current index $currentIndex : index : ${widget.index}');
       },
       itemBuilder: (BuildContext context, int index) {
         return Image.asset(

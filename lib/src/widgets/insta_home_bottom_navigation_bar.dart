@@ -46,7 +46,7 @@ class _InstaHomeBottomNavigationbarState extends State<InstaHomeBottomNavigation
 
     return BottomNavigationBar(
       items: items,
-      onTap: (index) {
+      onTap: (int index) {
         setState(() {
           currentIndex = index;
           print(currentIndex);
@@ -54,7 +54,7 @@ class _InstaHomeBottomNavigationbarState extends State<InstaHomeBottomNavigation
       },
       currentIndex: currentIndex,
       iconSize: 24.0,
-      showSelectedLabels: false,
+      //showSelectedLabels: false,
       selectedItemColor: Colors.black,
       unselectedItemColor: Colors.black,
       selectedFontSize: 0.0,
