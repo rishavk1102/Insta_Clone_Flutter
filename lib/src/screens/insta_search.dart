@@ -1,7 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../custom_icons/custom_icons.dart';
+import '../utils/ui_image.dart';
 
 class InstaSearch extends StatelessWidget {
   @override
@@ -38,27 +42,64 @@ class InstaSearch extends StatelessWidget {
               delegate: CustomSliverDelegate(),
               pinned: true,
             ),
-            SliverGrid(
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                childAspectRatio: 1.0,
-                maxCrossAxisExtent: 150.0,
-                mainAxisSpacing: 2.0,
-                crossAxisSpacing: 2.0,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return Container(
-                    height: 30.0,
-                    width: 20.0,
-                    color: Colors.red,
-                  );
-                },
-                childCount: 50,
-              ),
-            )
+            GalleryStaggeredGridView(),
           ],
         ),
       ),
+    );
+  }
+}
+
+class GalleryStaggeredGridView extends StatelessWidget {
+  int videoCount = 1;
+  int videoIndex = 1;
+  List<int> videosIndex = [];
+  List<String> images = UiImage.gallery;
+
+  GalleryStaggeredGridView() {
+    videosIndex.add(1);
+    for (var i = 0; i <= images.length; i++) {
+      if ((i == videoIndex + 8 && videoCount.isOdd) ||
+          (i == videoIndex + 10 && videoCount.isEven)) {
+        videoCount++;
+        videoIndex = i;
+        videosIndex.add(i);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverStaggeredGrid.countBuilder(
+      itemCount: images.length,
+      crossAxisCount: 3,
+      crossAxisSpacing: 4.0,
+      mainAxisSpacing: 4.0,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          decoration: BoxDecoration(color: Colors.grey[400]),
+          child: Image.asset(
+            images[index],
+            fit: BoxFit.cover,
+            frameBuilder: (BuildContext context, Widget child, int frame,
+                bool wasSynchronoulsyLoaded) {
+              if (wasSynchronoulsyLoaded) return child;
+
+              return AnimatedOpacity(
+                child: child,
+                opacity: frame == null ? 0 : 1,
+                duration: const Duration(seconds: 1),
+                curve: Curves.easeOut,
+              );
+            },
+          ),
+        );
+      },
+      staggeredTileBuilder: (int index) {
+        return videosIndex.contains(index)
+            ? StaggeredTile.count(2, 2)
+            : StaggeredTile.count(1, 1);
+      },
     );
   }
 }
