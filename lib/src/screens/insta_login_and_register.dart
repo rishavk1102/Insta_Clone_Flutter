@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +17,8 @@ class _InstaLoginAndRegisterState extends State<InstaLoginAndRegister> {
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final passwordController = TextEditingController();
+
+  bool register = true;
 
   @override
   void dispose() {
@@ -108,31 +111,41 @@ class _InstaLoginAndRegisterState extends State<InstaLoginAndRegister> {
             keyboardType: TextInputType.emailAddress,
           ),
           SizedBox(height: 10),
-          TextField(
-            controller: firstNameController,
-            decoration: InputDecoration(
-              hintText: 'First Name',
-              fillColor: Colors.grey[100],
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-            ),
-            keyboardType: TextInputType.text,
-          ),
+          register
+              ? TextField(
+                  controller: firstNameController,
+                  decoration: InputDecoration(
+                    hintText: 'First Name',
+                    fillColor: Colors.grey[100],
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  keyboardType: TextInputType.text,
+                )
+              : Container(
+                  height: 0.0,
+                  width: 0.0,
+                ),
           SizedBox(height: 10),
-          TextField(
-            controller: lastNameController,
-            decoration: InputDecoration(
-              hintText: 'Last Name',
-              fillColor: Colors.grey[100],
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-            ),
-            keyboardType: TextInputType.text,
-          ),
+          register
+              ? TextField(
+                  controller: lastNameController,
+                  decoration: InputDecoration(
+                    hintText: 'Last Name',
+                    fillColor: Colors.grey[100],
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  keyboardType: TextInputType.text,
+                )
+              : Container(
+                  height: 0.0,
+                  width: 0.0,
+                ),
           SizedBox(height: 10),
           TextField(
             controller: passwordController,
@@ -175,7 +188,7 @@ class _InstaLoginAndRegisterState extends State<InstaLoginAndRegister> {
                 borderRadius: BorderRadius.circular(5.0),
               ),
               child: Text(
-                'Sign Up',
+                register ? 'Sign Up' : 'Log In',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
@@ -220,13 +233,20 @@ class _InstaLoginAndRegisterState extends State<InstaLoginAndRegister> {
             text: TextSpan(
               children: <TextSpan>[
                 TextSpan(
-                  text: 'Alredy a user? ',
+                  text: register ? 'Alredy a user? ' : 'New to Instagram! ',
                   style: TextStyle(
                     color: Colors.black54,
                   ),
                 ),
                 TextSpan(
-                  text: 'Log In',
+                  text: register ? 'Log In' : 'Register',
+                  recognizer: new TapGestureRecognizer()
+                    ..onTap = () {
+                      print('Log In tapped!');
+                      setState(() {
+                        register = !register;
+                      });
+                    },
                   style: TextStyle(
                     color: Colors.blueGrey,
                     decoration: TextDecoration.underline,

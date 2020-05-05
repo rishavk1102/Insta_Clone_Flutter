@@ -32,7 +32,7 @@ class FirebaseServices {
           lastName: lastName,
           imageUrl: 'default',
         );
-        _database.child(user.uid).set(userObj.UserToMap());
+        _database.child('Users').child(user.uid).set(userObj.UserToMap());
       } else {
         Fluttertoast.showToast(
           msg: 'Some error occured, please try again!',
