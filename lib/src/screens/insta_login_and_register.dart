@@ -1,7 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class InstaLoginAndRegister extends StatelessWidget {
+import '../firebase-services.dart';
+
+class InstaLoginAndRegister extends StatefulWidget {
+  @override
+  _InstaLoginAndRegisterState createState() => _InstaLoginAndRegisterState();
+}
+
+class _InstaLoginAndRegisterState extends State<InstaLoginAndRegister> {
+  final firebaseServices = new FirebaseServices();
+
+  final emailController = TextEditingController();
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    firstNameController.dispose();
+    lastNameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,6 +96,7 @@ class InstaLoginAndRegister extends StatelessWidget {
   Widget registerEmailAndPasswordInput() => Column(
         children: <Widget>[
           TextField(
+            controller: emailController,
             decoration: InputDecoration(
               hintText: 'Phone Number or email',
               fillColor: Colors.grey[100],
@@ -80,9 +105,11 @@ class InstaLoginAndRegister extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5.0),
               ),
             ),
+            keyboardType: TextInputType.emailAddress,
           ),
           SizedBox(height: 10),
           TextField(
+            controller: firstNameController,
             decoration: InputDecoration(
               hintText: 'First Name',
               fillColor: Colors.grey[100],
@@ -91,9 +118,11 @@ class InstaLoginAndRegister extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5.0),
               ),
             ),
+            keyboardType: TextInputType.text,
           ),
           SizedBox(height: 10),
           TextField(
+            controller: lastNameController,
             decoration: InputDecoration(
               hintText: 'Last Name',
               fillColor: Colors.grey[100],
@@ -102,9 +131,11 @@ class InstaLoginAndRegister extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5.0),
               ),
             ),
+            keyboardType: TextInputType.text,
           ),
           SizedBox(height: 10),
           TextField(
+            controller: passwordController,
             decoration: InputDecoration(
               hintText: 'Password',
               fillColor: Colors.grey[100],
@@ -114,10 +145,26 @@ class InstaLoginAndRegister extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5.0),
               ),
             ),
+            keyboardType: TextInputType.visiblePassword,
           ),
           SizedBox(height: 10),
           GestureDetector(
-            onTap: () => print('Log in button clicked'),
+            onTap: () {
+              print(
+                  'Log in button clicked by ${firstNameController.text} ${lastNameController.text}');
+              firebaseServices
+                  .registerUserUsingEmainAndPassword(
+                    emailController.text,
+                    passwordController.text,
+                    firstNameController.text,
+                    lastNameController.text,
+                  )
+                  .then((FirebaseUser user) => print(user));
+              emailController.text = '';
+              firstNameController.text = '';
+              lastNameController.text = '';
+              passwordController.text = '';
+            },
             child: Container(
               padding: EdgeInsets.symmetric(
                 horizontal: 145.0,

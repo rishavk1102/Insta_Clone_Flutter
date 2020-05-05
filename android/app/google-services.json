@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "367010383299",
+    "firebase_url": "https://instagramclone-6acc6.firebaseio.com",
+    "project_id": "instagramclone-6acc6",
+    "storage_bucket": "instagramclone-6acc6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367010383299:android:0304f4d253a678001c2976",
+        "android_client_info": {
+          "package_name": "com.rishav.instaclone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "367010383299-hdg48l3n0f9eninu7i5i1548lvlb5u7j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFjbuFCTiDwPXuSImr3Ne8MvkbR5sdnRM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "367010383299-hdg48l3n0f9eninu7i5i1548lvlb5u7j.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "367010383299-pd76c9lmoloe51gfnf09h9cj8t6q2llk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rishav.instaclone"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
