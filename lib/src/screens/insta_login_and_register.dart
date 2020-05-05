@@ -165,14 +165,21 @@ class _InstaLoginAndRegisterState extends State<InstaLoginAndRegister> {
             onTap: () {
               print(
                   'Log in button clicked by ${firstNameController.text} ${lastNameController.text}');
-              firebaseServices
-                  .registerUserUsingEmainAndPassword(
-                    emailController.text,
-                    passwordController.text,
-                    firstNameController.text,
-                    lastNameController.text,
-                  )
-                  .then((FirebaseUser user) => print(user));
+              register
+                  ? firebaseServices
+                      .registerUserUsingEmainAndPassword(
+                        emailController.text,
+                        passwordController.text,
+                        firstNameController.text,
+                        lastNameController.text,
+                      )
+                      .then((FirebaseUser user) => print(user))
+                  : firebaseServices
+                      .loginWithEmailAndPassword(
+                        emailController.text,
+                        passwordController.text,
+                      )
+                      .then((FirebaseUser user) => print(user));
               emailController.text = '';
               firstNameController.text = '';
               lastNameController.text = '';

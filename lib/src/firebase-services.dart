@@ -42,4 +42,21 @@ class FirebaseServices {
     }
     return user;
   }
+
+  Future<FirebaseUser> loginWithEmailAndPassword(String email, String password) async {
+    FirebaseUser user;
+    try {
+      user = await _auth.signInWithEmailAndPassword(email: email, password: password);
+    } catch (e) {
+      print(e.toString());
+    } finally {
+      if (user != null) {
+        print('Login Successful!');
+      } else {
+        print('Login Unsuccessful!');
+      }
+    }
+
+    return user;
+  }
 }
