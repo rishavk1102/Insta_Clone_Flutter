@@ -1,23 +1,49 @@
 class User {
-  int id;
-  String userId;
-  String userName;
-  String userProfileImage;
+  String id;
+  String email;
+  String firstName;
+  String lastName;
+  String bio;
+  String imageUrl;
+  int followers;
+  int following;
+  int posts;
 
   User({
     this.id,
-    this.userId,
-    this.userName,
-    this.userProfileImage,
+    this.email,
+    this.firstName,
+    this.lastName,
+    this.bio = '',
+    this.imageUrl,
+    this.followers = 0,
+    this.following = 0,
+    this.posts = 0,
   });
 
-  int get getId => this.id;
-  String get getUserId => this.userId;
-  String get getUserName => this.userName;
-  String get getUserProfileImage => this.userProfileImage;
+  Map<String, dynamic> UserToMap() {
+    return <String, dynamic>{
+      'id': this.id,
+      'email': this.email,
+      'firstName': this.firstName,
+      'lastName': this.lastName,
+      'bio': this.bio,
+      'imageUrl': this.imageUrl,
+      'followers': this.followers,
+      'following': this.following,
+      'posts': this.posts,
+    };
+  }
 
-  set setId(int id) => this.id = id;
-  set setUserId(String userId) => this.userId = userId;
-  set setUserName(String userName) => this.userName = userName;
-  set setUserProfileImage(String userProfileImage) => this.userProfileImage = userProfileImage;
+  void MapToUser(Map<String, dynamic> map) {
+    this.id = map['id'];
+    this.email = map['email'];
+    this.firstName = map['firstName'];
+    this.lastName = map['lastName'];
+    this.bio = map['bio'];
+    this.imageUrl = map['imageUrl'];
+    this.followers = map['followers'];
+    this.following = map['following'];
+    this.posts = map['posts'];
+  }
 }
