@@ -9,6 +9,8 @@ import './insta_profile.dart';
 import './insta_search.dart';
 
 class InstaHome extends StatefulWidget {
+  static const routeName = '/insta-home';
+  
   @override
   _InstaHomeState createState() => _InstaHomeState();
 }

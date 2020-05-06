@@ -4,6 +4,7 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../firebase-services.dart';
+import './insta_home.dart';
 
 class InstaLoginAndRegister extends StatefulWidget {
   @override
@@ -19,6 +20,16 @@ class _InstaLoginAndRegisterState extends State<InstaLoginAndRegister> {
   final passwordController = TextEditingController();
 
   bool register = true;
+
+  @override
+  void initState() {
+    firebaseServices.getCurrentUser().then((user) {
+      if (user != null) {
+        Navigator.of(context).popAndPushNamed(InstaHome.routeName);
+      }
+    });
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -168,18 +179,26 @@ class _InstaLoginAndRegisterState extends State<InstaLoginAndRegister> {
               register
                   ? firebaseServices
                       .registerUserUsingEmainAndPassword(
-                        emailController.text,
-                        passwordController.text,
-                        firstNameController.text,
-                        lastNameController.text,
-                      )
-                      .then((FirebaseUser user) => print(user))
+                      emailController.text,
+                      passwordController.text,
+                      firstNameController.text,
+                      lastNameController.text,
+                    )
+                      .then((FirebaseUser user) {
+                      print(user);
+                      Navigator.of(context)
+                          .popAndPushNamed(InstaHome.routeName);
+                    })
                   : firebaseServices
                       .loginWithEmailAndPassword(
-                        emailController.text,
-                        passwordController.text,
-                      )
-                      .then((FirebaseUser user) => print(user));
+                      emailController.text,
+                      passwordController.text,
+                    )
+                      .then((FirebaseUser user) {
+                      print(user);
+                      Navigator.of(context)
+                          .popAndPushNamed(InstaHome.routeName);
+                    });
               emailController.text = '';
               firstNameController.text = '';
               lastNameController.text = '';

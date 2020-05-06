@@ -33,6 +33,7 @@ class FirebaseServices {
           imageUrl: 'default',
         );
         _database.child('Users').child(user.uid).set(userObj.UserToMap());
+        print('User created and data added to DB');
       } else {
         Fluttertoast.showToast(
           msg: 'Some error occured, please try again!',
@@ -58,5 +59,9 @@ class FirebaseServices {
     }
 
     return user;
+  }
+
+  Future<FirebaseUser> getCurrentUser() async {
+    return await _auth.currentUser();
   }
 }

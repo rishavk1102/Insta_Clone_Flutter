@@ -12,6 +12,9 @@ class App extends StatelessWidget {
         primaryColor: Colors.white,
       ),
       home: InstaLoginAndRegister(),
+      routes: {
+        InstaHome.routeName: (ctx) => InstaHome(),
+      },
     );
   }
 }
