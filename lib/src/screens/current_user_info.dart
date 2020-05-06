@@ -3,7 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../firebase-services.dart';
+import '../models/user.dart';
+
 class CurrentUserInfo extends StatefulWidget {
+  static const routeName = '/current-user-info';
+
   @override
   _CurrentUserInfoState createState() => _CurrentUserInfoState();
 }
@@ -11,6 +16,10 @@ class CurrentUserInfo extends StatefulWidget {
 class _CurrentUserInfoState extends State<CurrentUserInfo> {
   Future<File> imageFile;
 
+  final nameController = TextEditingController();
+  final userNameController = TextEditingController();
+  final websiteController = TextEditingController();
+  final bioController = TextEditingController();
   /*
       While using image picker make sure to add permissions.
       1. In Xcode go to Runner/info.plist and follow link https://flutter-examples.com/flutter-select-pick-image-from-camera-gallery/
@@ -135,7 +144,9 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
               color: Colors.grey,
             ),
           ),
-          TextField(),
+          TextField(
+            controller: nameController,
+          ),
         ],
       );
 
@@ -148,7 +159,9 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
               color: Colors.grey,
             ),
           ),
-          TextField(),
+          TextField(
+            controller: userNameController,
+          ),
         ],
       );
 
@@ -161,7 +174,9 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
               color: Colors.grey,
             ),
           ),
-          TextField(),
+          TextField(
+            controller: websiteController,
+          ),
         ],
       );
 
@@ -174,7 +189,9 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
               color: Colors.grey,
             ),
           ),
-          TextField(),
+          TextField(
+            controller: bioController,
+          ),
         ],
       );
 }

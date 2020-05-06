@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../firebase-services.dart';
 import './insta_home.dart';
+import './current_user_info.dart';
 
 class InstaLoginAndRegister extends StatefulWidget {
   @override
@@ -187,7 +188,7 @@ class _InstaLoginAndRegisterState extends State<InstaLoginAndRegister> {
                       .then((FirebaseUser user) {
                       print(user);
                       Navigator.of(context)
-                          .popAndPushNamed(InstaHome.routeName);
+                          .popAndPushNamed(CurrentUserInfo.routeName);
                     })
                   : firebaseServices
                       .loginWithEmailAndPassword(
