@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './screens/insta_home.dart';
 import './screens/insta_login_and_register.dart';
+import './screens/current_user_info.dart';
 
 class App extends StatelessWidget {
   @override
@@ -11,7 +12,7 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: InstaLoginAndRegister(),
+      home: CurrentUserInfo(),
       routes: {
         InstaHome.routeName: (ctx) => InstaHome(),
       },
