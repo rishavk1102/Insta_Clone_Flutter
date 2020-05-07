@@ -29,6 +29,7 @@ dependencies:
   flutter_signin_button: ^1.0.0
   fluttertoast: ^4.0.0
   image_picker: ^0.4.10
+  progress_dialog: ^1.2.2
   #firebase_pligins
   firebase_auth: ^0.9.0
   firebase_database: ^1.0.0

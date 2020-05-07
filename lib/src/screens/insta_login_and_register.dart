@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 import '../firebase-services.dart';
 import './insta_home.dart';
@@ -22,6 +23,8 @@ class _InstaLoginAndRegisterState extends State<InstaLoginAndRegister> {
   final passwordController = TextEditingController();
 
   bool register = true;
+
+  ProgressDialog progressDialog;
 
   // @override
   // void initState() {
@@ -44,6 +47,20 @@ class _InstaLoginAndRegisterState extends State<InstaLoginAndRegister> {
 
   @override
   Widget build(BuildContext context) {
+    progressDialog = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+      showLogs: true,
+    );
+    progressDialog.style(
+      message: 'Please wait!',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      progressWidget: CircularProgressIndicator(),
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+    );
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 40),
@@ -175,9 +192,10 @@ class _InstaLoginAndRegisterState extends State<InstaLoginAndRegister> {
           ),
           SizedBox(height: 10),
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               print(
                   'Log in button clicked by ${firstNameController.text} ${lastNameController.text}');
+              await progressDialog.show();
               register
                   ? firebaseServices
                       .registerUserUsingEmainAndPassword(
@@ -186,21 +204,23 @@ class _InstaLoginAndRegisterState extends State<InstaLoginAndRegister> {
                       firstNameController.text,
                       lastNameController.text,
                     )
-                      .then((User user) {
+                      .then((User user) async {
                       print(user);
                       Navigator.of(context).popAndPushNamed(
                           CurrentUserInfo.routeName,
                           arguments: user);
+                      await progressDialog.hide();
                     })
                   : firebaseServices
                       .loginWithEmailAndPassword(
                       emailController.text,
                       passwordController.text,
                     )
-                      .then((FirebaseUser user) {
+                      .then((FirebaseUser user) async {
                       print(user);
                       Navigator.of(context)
                           .popAndPushNamed(InstaHome.routeName);
+                      await progressDialog.hide();
                     });
               emailController.text = '';
               firstNameController.text = '';

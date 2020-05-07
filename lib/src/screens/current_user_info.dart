@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 import '../firebase-services.dart';
 import '../models/user.dart';
@@ -23,6 +24,8 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
   final userNameController = TextEditingController();
   final websiteController = TextEditingController();
   final bioController = TextEditingController();
+
+  ProgressDialog progressDialog;
   /*
       While using image picker make sure to add permissions.
       1. In Xcode go to Runner/info.plist and follow link https://flutter-examples.com/flutter-select-pick-image-from-camera-gallery/
@@ -46,6 +49,21 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
     userNameController.text = currentUser.userName;
     websiteController.text = currentUser.website;
     bioController.text = currentUser.bio;
+
+    progressDialog = ProgressDialog(
+      context,
+      type: ProgressDialogType.Normal,
+      isDismissible: false,
+      showLogs: true,
+    );
+    progressDialog.style(
+      message: 'Please wait!',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      progressWidget: CircularProgressIndicator(),
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -105,10 +123,11 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
             color: Colors.blueAccent,
             size: 32.0,
           ),
-          onPressed: () {
+          onPressed: () async {
+            await progressDialog.show();
             FirebaseServices()
                 .updateProfileImage(currentUser.id, imageFile)
-                .then((String downloadUrl) {
+                .then((String downloadUrl) async {
               currentUser.imageUrl = downloadUrl;
               currentUser.userName = userNameController.text;
               currentUser.website = websiteController.text;
@@ -117,6 +136,7 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
                 Navigator.of(context).popAndPushNamed(InstaHome.routeName);
               });
               print('Done');
+              await progressDialog.hide();
             });
           },
         )
