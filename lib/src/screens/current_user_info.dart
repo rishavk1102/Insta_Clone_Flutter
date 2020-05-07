@@ -106,12 +106,17 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
             size: 32.0,
           ),
           onPressed: () {
-            print('Done');
-            currentUser.userName = userNameController.text;
-            currentUser.website = websiteController.text;
-            currentUser.bio = bioController.text;
-            FirebaseServices().updateUserInfo(currentUser).then((_) {
-              Navigator.of(context).popAndPushNamed(InstaHome.routeName);
+            FirebaseServices()
+                .updateProfileImage(currentUser.id, imageFile)
+                .then((String downloadUrl) {
+              currentUser.imageUrl = downloadUrl;
+              currentUser.userName = userNameController.text;
+              currentUser.website = websiteController.text;
+              currentUser.bio = bioController.text;
+              FirebaseServices().updateUserInfo(currentUser).then((_) {
+                Navigator.of(context).popAndPushNamed(InstaHome.routeName);
+              });
+              print('Done');
             });
           },
         )
@@ -182,7 +187,8 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
             ),
           ),
           TextField(
-            controller: userNameController, keyboardType: TextInputType.text,
+            controller: userNameController,
+            keyboardType: TextInputType.text,
           ),
         ],
       );
@@ -216,6 +222,7 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
             controller: bioController,
             keyboardType: TextInputType.text,
             maxLines: 6,
+            minLines: 1,
           ),
         ],
       );
