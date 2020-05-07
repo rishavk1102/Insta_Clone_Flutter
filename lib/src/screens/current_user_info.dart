@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../firebase-services.dart';
 import '../models/user.dart';
+import './insta_home.dart';
 
 class CurrentUserInfo extends StatefulWidget {
   static const routeName = '/current-user-info';
@@ -15,6 +16,8 @@ class CurrentUserInfo extends StatefulWidget {
 
 class _CurrentUserInfoState extends State<CurrentUserInfo> {
   Future<File> imageFile;
+
+  User currentUser;
 
   final nameController = TextEditingController();
   final userNameController = TextEditingController();
@@ -37,6 +40,13 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
 
   @override
   Widget build(BuildContext context) {
+    currentUser = ModalRoute.of(context).settings.arguments;
+
+    nameController.text = currentUser.firstName + ' ' + currentUser.lastName;
+    userNameController.text = currentUser.userName;
+    websiteController.text = currentUser.website;
+    bioController.text = currentUser.bio;
+
     return Scaffold(
       appBar: AppBar(
         leading: leading(),
@@ -75,7 +85,10 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
           size: 32.0,
           color: Colors.black,
         ),
-        onPressed: () => print('Close button pressed!'),
+        onPressed: () {
+          print('Close button pressed!');
+          Navigator.of(context).pushReplacementNamed(InstaHome.routeName);
+        },
       );
 
   Widget title() => Padding(
@@ -92,7 +105,15 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
             color: Colors.blueAccent,
             size: 32.0,
           ),
-          onPressed: () => print('Done'),
+          onPressed: () {
+            print('Done');
+            currentUser.userName = userNameController.text;
+            currentUser.website = websiteController.text;
+            currentUser.bio = bioController.text;
+            FirebaseServices().updateUserInfo(currentUser).then((_) {
+              Navigator.of(context).popAndPushNamed(InstaHome.routeName);
+            });
+          },
         )
       ];
 
@@ -146,6 +167,7 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
           ),
           TextField(
             controller: nameController,
+            enabled: false,
           ),
         ],
       );
@@ -160,7 +182,7 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
             ),
           ),
           TextField(
-            controller: userNameController,
+            controller: userNameController, keyboardType: TextInputType.text,
           ),
         ],
       );
@@ -176,6 +198,7 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
           ),
           TextField(
             controller: websiteController,
+            keyboardType: TextInputType.url,
           ),
         ],
       );
@@ -191,6 +214,8 @@ class _CurrentUserInfoState extends State<CurrentUserInfo> {
           ),
           TextField(
             controller: bioController,
+            keyboardType: TextInputType.text,
+            maxLines: 6,
           ),
         ],
       );

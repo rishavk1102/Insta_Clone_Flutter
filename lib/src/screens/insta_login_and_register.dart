@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../firebase-services.dart';
 import './insta_home.dart';
 import './current_user_info.dart';
+import '../models/user.dart';
 
 class InstaLoginAndRegister extends StatefulWidget {
   @override
@@ -22,15 +23,15 @@ class _InstaLoginAndRegisterState extends State<InstaLoginAndRegister> {
 
   bool register = true;
 
-  @override
-  void initState() {
-    firebaseServices.getCurrentUser().then((user) {
-      if (user != null) {
-        Navigator.of(context).popAndPushNamed(InstaHome.routeName);
-      }
-    });
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   firebaseServices.getCurrentUser().then((user) {
+  //     if (user != null) {
+  //       Navigator.of(context).popAndPushNamed(InstaHome.routeName);
+  //     }
+  //   });
+  //   super.initState();
+  // }
 
   @override
   void dispose() {
@@ -185,10 +186,11 @@ class _InstaLoginAndRegisterState extends State<InstaLoginAndRegister> {
                       firstNameController.text,
                       lastNameController.text,
                     )
-                      .then((FirebaseUser user) {
+                      .then((User user) {
                       print(user);
-                      Navigator.of(context)
-                          .popAndPushNamed(CurrentUserInfo.routeName);
+                      Navigator.of(context).popAndPushNamed(
+                          CurrentUserInfo.routeName,
+                          arguments: user);
                     })
                   : firebaseServices
                       .loginWithEmailAndPassword(

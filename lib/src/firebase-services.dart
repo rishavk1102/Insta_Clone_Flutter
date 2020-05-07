@@ -11,9 +11,10 @@ class FirebaseServices {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final DatabaseReference _database = FirebaseDatabase().reference();
 
-  Future<FirebaseUser> registerUserUsingEmainAndPassword(
+  Future<User> registerUserUsingEmainAndPassword(
       String email, String password, String firstName, String lastName) async {
     FirebaseUser user;
+    User userObj;
     try {
       user = (await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -26,7 +27,7 @@ class FirebaseServices {
     } finally {
       if (user != null) {
         //User Cerested
-        User userObj = User(
+        userObj = User(
           id: user.uid,
           email: email,
           userName: '',
@@ -44,7 +45,7 @@ class FirebaseServices {
         );
       }
     }
-    return user;
+    return userObj;
   }
 
   Future<FirebaseUser> loginWithEmailAndPassword(
@@ -68,5 +69,10 @@ class FirebaseServices {
 
   Future<FirebaseUser> getCurrentUser() async {
     return await _auth.currentUser();
+  }
+
+  Future<void> updateUserInfo(User user) async {
+    await _database.child('Users').child(user.id).set(user.UserToMap());
+    return;
   }
 }
