@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class InstaGallery extends StatefulWidget {
   @override
@@ -45,7 +46,13 @@ class _InstaGalleryState extends State<InstaGallery> {
                 color: Colors.blueAccent,
               ),
             ),
-            onPressed: () => print('Done button pressed'),
+            onPressed: () {
+              if (selectedImages.isEmpty)
+                Fluttertoast.showToast(
+                  msg: 'Please select an image first!',
+                  backgroundColor: Colors.blueGrey,
+                );
+            },
           ),
         ],
       ),
@@ -167,12 +174,24 @@ class _InstaGalleryState extends State<InstaGallery> {
         child: multiple
             ? Container(
                 padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  '${pageViewActiveIndex + 1} / ${selectedImages.length}',
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    padding: EdgeInsets.all(5.0),
+                    width: 50.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(5.0),
+                      color: Colors.grey[400],
+                    ),
+                    child: Text(
+                      '${pageViewActiveIndex + 1} / ${selectedImages.length}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               )
