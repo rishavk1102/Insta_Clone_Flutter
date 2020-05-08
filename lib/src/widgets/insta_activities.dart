@@ -19,17 +19,16 @@ class InstaActivities extends StatefulWidget {
 }
 
 class _InstaActivitiesState extends State<InstaActivities> {
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(leading: leading(),
+      appBar: AppBar(
+        leading: leading(),
         title: title(),
         titleSpacing: 8.0,
         actions: actions(),
-        ),
-          body: RefreshIndicator(
+      ),
+      body: RefreshIndicator(
         child: ListView.builder(
           itemCount: widget.listContent.length,
           itemBuilder: (BuildContext context, int index) {

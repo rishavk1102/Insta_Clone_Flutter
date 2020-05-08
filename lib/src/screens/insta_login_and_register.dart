@@ -26,15 +26,15 @@ class _InstaLoginAndRegisterState extends State<InstaLoginAndRegister> {
 
   ProgressDialog progressDialog;
 
-  // @override
-  // void initState() {
-  //   firebaseServices.getCurrentUser().then((user) {
-  //     if (user != null) {
-  //       Navigator.of(context).popAndPushNamed(InstaHome.routeName);
-  //     }
-  //   });
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    firebaseServices.getCurrentUser().then((user) {
+      if (user != null) {
+        Navigator.of(context).popAndPushNamed(InstaHome.routeName);
+      }
+    });
+    super.initState();
+  }
 
   @override
   void dispose() {

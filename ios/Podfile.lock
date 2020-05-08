@@ -1,4 +1,9 @@
 PODS:
+  - BSGridCollectionViewLayout (1.2.2)
+  - BSImagePicker (2.9.0):
+    - BSGridCollectionViewLayout (= 1.2.2)
+    - BSImageView (= 1.0.2)
+  - BSImageView (1.0.2)
   - Firebase/Auth (5.20.2):
     - Firebase/CoreOnly
     - FirebaseAuth (= 5.4.2)
@@ -87,6 +92,9 @@ PODS:
   - image_picker (0.0.1):
     - Flutter
   - leveldb-library (1.22)
+  - multi_image_picker (2.3.33):
+    - BSImagePicker (~> 2.9.0)
+    - Flutter
   - nanopb (0.3.9011):
     - nanopb/decode (= 0.3.9011)
     - nanopb/encode (= 0.3.9011)
@@ -101,9 +109,13 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - multi_image_picker (from `.symlinks/plugins/multi_image_picker/ios`)
 
 SPEC REPOS:
   trunk:
+    - BSGridCollectionViewLayout
+    - BSImagePicker
+    - BSImageView
     - Firebase
     - FirebaseAnalytics
     - FirebaseAuth
@@ -133,8 +145,13 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
+  multi_image_picker:
+    :path: ".symlinks/plugins/multi_image_picker/ios"
 
 SPEC CHECKSUMS:
+  BSGridCollectionViewLayout: 3e6f23b3a2b4f0ca9afae09ca01389d1057f7b32
+  BSImagePicker: 553707de1adaad42eac252e0b84d20dbdba83fe9
+  BSImageView: ab22ff8cae61f1ae17a3c9efeeb216af3cf84a09
   Firebase: 0c8cf33f266410c61ab3e2265cfa412200351d9c
   firebase_auth: e32ab45c234bdf847b7777f5b097ce4f7d26879f
   firebase_core: ce5006bb48508ee4e71e0f429a3f519bb8ee2961
@@ -154,6 +171,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 6f5c8abbab8a9bce4bb3f057e317728ec6182b10
   image_picker: a211f28b95a560433c00f5cd3773f4710a20404d
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
+  multi_image_picker: 2a81f6e0fb14315d83dcb5306973a95b40a03b3a
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
 
 PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
