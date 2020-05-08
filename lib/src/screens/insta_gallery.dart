@@ -38,16 +38,23 @@ class _InstaGalleryState extends State<InstaGallery> {
             icon: Icon(Icons.add),
             onPressed: () => showModalSheet(context),
           ),
-          IconButton(
-            icon: Icon(
-              Icons.done,
-              color: Colors.blueAccent,
+          FlatButton(
+            child: Text(
+              'NEXT',
+              style: TextStyle(
+                color: Colors.blueAccent,
+              ),
             ),
             onPressed: () => print('Done button pressed'),
           ),
         ],
       ),
-      body: showImage(),
+      body: Container(
+        padding: EdgeInsets.all(10.0),
+        width: double.infinity,
+        height: 400.0,
+        child: showImage(),
+      ),
     );
   }
 
@@ -104,35 +111,37 @@ class _InstaGalleryState extends State<InstaGallery> {
         if (selectedImages.length == 0) {
           return Center(
             child: RichText(
-              text: TextSpan(children: <TextSpan>[
-                TextSpan(
-                  text: 'Click ',
-                  style: TextStyle(
-                    color: Colors.grey[500],
-                    fontSize: 20.0,
+              text: TextSpan(
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'Click ',
+                    style: TextStyle(
+                      color: Colors.grey[500],
+                      fontSize: 20.0,
+                    ),
                   ),
-                ),
-                TextSpan(
-                  text: '+',
-                  style: TextStyle(
-                    color: Colors.blueGrey,
-                    fontSize: 40.0,
+                  TextSpan(
+                    text: '+',
+                    style: TextStyle(
+                      color: Colors.blueGrey,
+                      fontSize: 40.0,
+                    ),
                   ),
-                ),
-                TextSpan(
-                  text: ' to add images.',
-                  style: TextStyle(
-                    color: Colors.grey[500],
-                    fontSize: 20.0,
+                  TextSpan(
+                    text: ' to add images.',
+                    style: TextStyle(
+                      color: Colors.grey[500],
+                      fontSize: 20.0,
+                    ),
                   ),
-                ),
-              ],),
+                ],
+              ),
             ),
           );
         }
 
         return selectedImages.length == 1
-            ? imageBuilder(FileImage(snapshot.data))
+            ? imageBuilder(FileImage(snapshot.data), false)
             : PageView.builder(
                 itemCount: selectedImages.length,
                 onPageChanged: (currentIndex) {
@@ -141,20 +150,32 @@ class _InstaGalleryState extends State<InstaGallery> {
                   });
                 },
                 itemBuilder: (BuildContext context, int index) {
-                  return imageBuilder(FileImage(
-                    selectedImages.reversed.toList()[index],
-                  ));
+                  return imageBuilder(
+                      FileImage(selectedImages.reversed.toList()[index]), true);
                 });
       },
     );
   }
 
-  Widget imageBuilder(ImageProvider image) => Container(
+  Widget imageBuilder(ImageProvider image, bool multiple) => Container(
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
             image: image,
           ),
         ),
+        child: multiple
+            ? Container(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  '${pageViewActiveIndex + 1} / ${selectedImages.length}',
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            : Container(),
       );
 }
