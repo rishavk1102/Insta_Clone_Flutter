@@ -30,6 +30,8 @@ dependencies:
   fluttertoast: ^4.0.0
   image_picker: ^0.4.10
   progress_dialog: ^1.2.2
+  camera: ^0.5.4+1
+  photofilters: ^1.0.5
   #firebase_pligins
   firebase_auth: ^0.9.0
   firebase_database: ^1.0.0

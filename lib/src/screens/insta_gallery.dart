@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'package:path/path.dart' as path;
+import 'package:photofilters/photofilters.dart';
+import 'package:image/image.dart' as imageLib;
+
 class InstaGallery extends StatefulWidget {
   @override
   _InstaGalleryState createState() => _InstaGalleryState();
@@ -12,8 +16,11 @@ class InstaGallery extends StatefulWidget {
 class _InstaGalleryState extends State<InstaGallery> {
   int pageViewActiveIndex = 0;
 
+  bool nextPressed = false;
+
   Future<File> imageFile;
   List<File> selectedImages = [];
+  List<String> filteredImagesPath = [];
 
   @override
   void initState() {
@@ -46,12 +53,25 @@ class _InstaGalleryState extends State<InstaGallery> {
                 color: Colors.blueAccent,
               ),
             ),
-            onPressed: () {
+            onPressed: () async {
               if (selectedImages.isEmpty)
                 Fluttertoast.showToast(
                   msg: 'Please select an image first!',
                   backgroundColor: Colors.blueGrey,
                 );
+              else {
+                nextPressed = true;
+
+                for (var i = 0; i < selectedImages.length; i++) {
+                  applyFilter(i).then((Map map) {
+                    if (map != null && map.containsKey('image_filtered')) {
+                      filteredImagesPath.add(map['image_filtered'].path);
+                      print(filteredImagesPath);
+                      if (i == (selectedImages.length - 1)) setState(() {});
+                    }
+                  });
+                }
+              }
             },
           ),
         ],
@@ -148,7 +168,11 @@ class _InstaGalleryState extends State<InstaGallery> {
         }
 
         return selectedImages.length == 1
-            ? imageBuilder(FileImage(snapshot.data), false)
+            ? imageBuilder(
+                nextPressed
+                    ? FileImage(File(filteredImagesPath[0]))
+                    : FileImage(snapshot.data),
+                false)
             : PageView.builder(
                 itemCount: selectedImages.length,
                 onPageChanged: (currentIndex) {
@@ -158,7 +182,13 @@ class _InstaGalleryState extends State<InstaGallery> {
                 },
                 itemBuilder: (BuildContext context, int index) {
                   return imageBuilder(
-                      FileImage(selectedImages.reversed.toList()[index]), true);
+                      FileImage(nextPressed
+                          ? ((index >= filteredImagesPath.length)
+                              ? selectedImages[index]
+                              : File(
+                                  filteredImagesPath.reversed.toList()[index]))
+                          : (selectedImages.reversed.toList()[index])),
+                      true);
                 });
       },
     );
@@ -197,4 +227,24 @@ class _InstaGalleryState extends State<InstaGallery> {
               )
             : Container(),
       );
+
+  Future<Map> applyFilter(int i) async {
+    var imageFile = File(selectedImages[i].path);
+    String fileName = path.basename(imageFile.path);
+    var image = imageLib.decodeImage(imageFile.readAsBytesSync());
+    image = imageLib.copyResize(image, width: 600);
+    return await Navigator.push(
+      context,
+      new MaterialPageRoute(
+        builder: (context) => new PhotoFilterSelector(
+          title: Text('Please select filter'),
+          filters: presetFiltersList,
+          image: image,
+          filename: fileName,
+          loader: Center(child: CircularProgressIndicator()),
+          fit: BoxFit.contain,
+        ),
+      ),
+    );
+  }
 }
