@@ -100,4 +100,14 @@ class FirebaseServices {
       print('Error : $error');
     }
   }
+
+  Future<User> getCurrentUserData() async {
+    User user;
+    await getCurrentUser().then((FirebaseUser currentUser) async {
+      await _database.child('Users').child(currentUser.uid).once().then((DataSnapshot snapshot) async {
+        user = User.MapToUser(snapshot);
+      });
+    });
+    return user;
+  }
 }

@@ -8,6 +8,8 @@ import 'package:path/path.dart' as path;
 import 'package:photofilters/photofilters.dart';
 import 'package:image/image.dart' as imageLib;
 
+import './post_edit.dart';
+
 class InstaGallery extends StatefulWidget {
   @override
   _InstaGalleryState createState() => _InstaGalleryState();
@@ -48,7 +50,7 @@ class _InstaGalleryState extends State<InstaGallery> {
           ),
           FlatButton(
             child: Text(
-              'NEXT',
+              nextPressed ? 'PROCEED' : 'NEXT',
               style: TextStyle(
                 color: Colors.blueAccent,
               ),
@@ -59,9 +61,12 @@ class _InstaGalleryState extends State<InstaGallery> {
                   msg: 'Please select an image first!',
                   backgroundColor: Colors.blueGrey,
                 );
-              else {
+              else if (nextPressed) {
+                print('Proceed Clicked');
+                Navigator.of(context).pushNamed(PostEdit.routeName,
+                    arguments: filteredImagesPath);
+              } else {
                 nextPressed = true;
-
                 for (var i = 0; i < selectedImages.length; i++) {
                   applyFilter(i).then((Map map) {
                     if (map != null && map.containsKey('image_filtered')) {
