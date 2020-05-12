@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:intl/intl.dart';
 
 import './models/user.dart';
+import './models/post_data.dart';
 
 class FirebaseServices {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -104,10 +107,61 @@ class FirebaseServices {
   Future<User> getCurrentUserData() async {
     User user;
     await getCurrentUser().then((FirebaseUser currentUser) async {
-      await _database.child('Users').child(currentUser.uid).once().then((DataSnapshot snapshot) async {
+      await _database
+          .child('Users')
+          .child(currentUser.uid)
+          .once()
+          .then((DataSnapshot snapshot) async {
         user = User.MapToUser(snapshot);
       });
     });
     return user;
+  }
+
+  Future<List<String>> uploadPostImage(
+      String uid, List<String> selecetedImages) async {
+    List<String> downloadUrls = [];
+    try {
+      for (var i = 0; i < selecetedImages.length; i++) {
+        StorageUploadTask uploadTask = _storage
+            .child('PostPictures')
+            .child('$uid')
+            .child(
+                '$uid@${DateFormat('kk:mm:ss:EEE:d:MMM').format(DateTime.now())}:postNo-$i')
+            .putFile(
+              File(selecetedImages[i]),
+              StorageMetadata(contentType: 'image/jpeg'),
+            );
+
+        String downloadUrl =
+            await (await uploadTask.onComplete).ref.getDownloadURL();
+        print(downloadUrl);
+        downloadUrls.add(downloadUrl);
+      }
+    } catch (error) {
+      print('Error : $error');
+    }
+    return downloadUrls;
+  }
+
+  Future<PostData> uploadPostdata(
+      String uid, String caption, List<String> selecetedImages) async {
+    PostData postData;
+    await uploadPostImage(uid, selecetedImages)
+        .then((List<String> downloadUrls) async {
+      DatabaseReference postRef = _database.child('Posts').child('$uid').push();
+      print(postRef.key);
+      postData = PostData(
+        caption: caption,
+        gallery: downloadUrls,
+        postId: postRef.key,
+        postTime: DateFormat('kk:mm:ss:EEE:d:MMM').format(DateTime.now()),
+        totalComment: 0,
+        totalLike: 0,
+      );
+
+      await postRef.set(postData.PostDataToMap());
+    });
+    return postData;
   }
 }

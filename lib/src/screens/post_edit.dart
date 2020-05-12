@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../firebase-services.dart';
 import '../models/user.dart';
 import './select_location.dart';
+import '../models/post_data.dart';
 
 class PostEdit extends StatefulWidget {
   static const routeName = '/post-edit';
@@ -16,6 +17,7 @@ class PostEdit extends StatefulWidget {
 class _PostEditState extends State<PostEdit> {
   User currentUser;
   List<String> selectedImages = [];
+  FirebaseServices _firebaseServices = FirebaseServices();
 
   var captionController = TextEditingController();
 
@@ -27,7 +29,7 @@ class _PostEditState extends State<PostEdit> {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseServices()
+    _firebaseServices
         .getCurrentUserData()
         .then((value) => this.currentUser = value);
 
@@ -47,7 +49,18 @@ class _PostEditState extends State<PostEdit> {
               'SHARE',
               style: TextStyle(color: Colors.blueAccent),
             ),
-            onPressed: () => print('SHARE button pressed'),
+            onPressed: () async {
+              print('SHARE button pressed');
+              await _firebaseServices
+                  .uploadPostdata(
+                currentUser.id,
+                captionController.text,
+                selectedImages,
+              )
+                  .then((PostData currentPost) {
+                print(currentPost.postId);
+              });
+            },
           )
         ],
       ),
@@ -79,7 +92,6 @@ class _PostEditState extends State<PostEdit> {
           ),
           Expanded(
             child: TextField(
-              onEditingComplete: () => print('Editing complete'),
               controller: captionController,
               keyboardType: TextInputType.multiline,
               minLines: 1,
@@ -107,6 +119,7 @@ class _PostEditState extends State<PostEdit> {
       );
 
   Widget tagPeople() => Container(
+        //TODO - ADD FUNCTIONALITY
         width: double.infinity,
         padding: const EdgeInsets.all(10.0),
         child: Text(
