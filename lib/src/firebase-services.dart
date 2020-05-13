@@ -6,7 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 
 import './models/user.dart';
 import './models/post_data.dart';
@@ -16,6 +16,7 @@ class FirebaseServices {
   final DatabaseReference _database = FirebaseDatabase().reference();
   final StorageReference _storage = FirebaseStorage.instance.ref();
 
+  //  REGISTERING USERS WITH EMAIL AND PASSWORD
   Future<User> registerUserUsingEmainAndPassword(
       String email, String password, String firstName, String lastName) async {
     FirebaseUser user;
@@ -53,6 +54,7 @@ class FirebaseServices {
     return userObj;
   }
 
+  //  LOGIN USERS WITH EMAIL AND PASSWORD
   Future<FirebaseUser> loginWithEmailAndPassword(
       String email, String password) async {
     FirebaseUser user;
@@ -72,15 +74,18 @@ class FirebaseServices {
     return user;
   }
 
+  // RETURN THE CURRENT USER
   Future<FirebaseUser> getCurrentUser() async {
     return await _auth.currentUser();
   }
 
+  // UPDATE'S THE CURRENT USER INFO STORED IN REALTIME DATABASE
   Future<void> updateUserInfo(User user) async {
     await _database.child('Users').child(user.id).set(user.UserToMap());
     return;
   }
 
+  // UPDATE PROFILE PHOTO BY ADDING PHOTO TO CLOUD STORAGE AND RETURNING THE DOWNLOAD URL
   Future<String> updateProfileImage(String uid, Future<File> imageFile) async {
     try {
       StorageUploadTask uploadTask =
@@ -104,6 +109,7 @@ class FirebaseServices {
     }
   }
 
+  //  EXTRACTS CURRENT USER DATA FROM REALTIMBE DB AND RETURNS A USER OBJECT
   Future<User> getCurrentUserData() async {
     User user;
     await getCurrentUser().then((FirebaseUser currentUser) async {
@@ -118,6 +124,7 @@ class FirebaseServices {
     return user;
   }
 
+  //  UPLOADS ALL THE POST IMAGES AND RETURNS A LIST OF DOWNLOAD URLS FOR EACH PICTURE
   Future<List<String>> uploadPostImage(
       String uid, List<String> selecetedImages) async {
     List<String> downloadUrls = [];
@@ -127,7 +134,7 @@ class FirebaseServices {
             .child('PostPictures')
             .child('$uid')
             .child(
-                '$uid@${DateFormat('kk:mm:ss:EEE:d:MMM').format(DateTime.now())}:postNo-$i')
+                '$uid@${intl.DateFormat('kk:mm:ss:EEE:d:MMM').format(DateTime.now())}:postNo-$i')
             .putFile(
               File(selecetedImages[i]),
               StorageMetadata(contentType: 'image/jpeg'),
@@ -144,6 +151,7 @@ class FirebaseServices {
     return downloadUrls;
   }
 
+  //  ADDS THE POST DATA TO REALTIME DATABASE
   Future<PostData> uploadPostdata(
       String uid, String caption, List<String> selecetedImages) async {
     PostData postData;
@@ -155,7 +163,7 @@ class FirebaseServices {
         caption: caption,
         gallery: downloadUrls,
         postId: postRef.key,
-        postTime: DateFormat('kk:mm:ss:EEE:d:MMM').format(DateTime.now()),
+        postTime: intl.DateFormat('kk:mm:ss:EEE:d:MMM').format(DateTime.now()),
         totalComment: 0,
         totalLike: 0,
       );

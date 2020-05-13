@@ -254,7 +254,7 @@ class _SelectLocationState extends State<SelectLocation> {
       _placesList.add(Place(predictions[i]['description'],
           predictions[i]['structured_formatting']['secondary_text']));
     }
-    print(_placesList[4].sub_title);
+    print(_placesList[4].subTitle);
 
     setState(() {
       isSearching = true;
@@ -311,20 +311,27 @@ class _SelectLocationState extends State<SelectLocation> {
         child: ListView.builder(
           itemCount: isSearching ? _placesList.length : 5,
           itemBuilder: (BuildContext context, int index) {
-            return Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: ListTile(
-                leading: Icon(Icons.location_on),
-                title: Text(isSearching
-                    ? (_placesList[index].title != null)
-                        ? _placesList[index].title
-                        : ''
-                    : _suggestedList[index].title),
-                subtitle: Text(isSearching
-                    ? (_placesList[index].sub_title != null)
-                        ? _placesList[index].sub_title
-                        : ''
-                    : _suggestedList[index].sub_title),
+            return GestureDetector(
+              onTap: () {
+                Place place =
+                    (isSearching) ? _placesList[index] : _suggestedList[index];
+                Navigator.of(context).pop(place);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ListTile(
+                  leading: Icon(Icons.location_on),
+                  title: Text(isSearching
+                      ? (_placesList[index].title != null)
+                          ? _placesList[index].title
+                          : ''
+                      : _suggestedList[index].title),
+                  subtitle: Text(isSearching
+                      ? (_placesList[index].subTitle != null)
+                          ? _placesList[index].subTitle
+                          : ''
+                      : _suggestedList[index].subTitle),
+                ),
               ),
             );
           },

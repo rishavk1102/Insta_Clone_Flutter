@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 
@@ -6,6 +7,7 @@ import '../firebase-services.dart';
 import '../models/user.dart';
 import './select_location.dart';
 import '../models/post_data.dart';
+import '../models/place.dart';
 
 class PostEdit extends StatefulWidget {
   static const routeName = '/post-edit';
@@ -16,6 +18,7 @@ class PostEdit extends StatefulWidget {
 
 class _PostEditState extends State<PostEdit> {
   User currentUser;
+  Place place;
   List<String> selectedImages = [];
   FirebaseServices _firebaseServices = FirebaseServices();
 
@@ -133,18 +136,53 @@ class _PostEditState extends State<PostEdit> {
       );
 
   Widget addLocation() => GestureDetector(
-        onTap: () => Navigator.of(context).pushNamed(SelectLocation.routeName),
+        onTap: () async {
+          place = (await Navigator.of(context)
+              .pushNamed(SelectLocation.routeName)) as Place;
+
+          if (place != null) {
+            print(place.title);
+            setState(() {});
+          }
+        },
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.all(10.0),
-          child: Text(
-            'Add Location',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20.0,
-            ),
-          ),
+          child: (place != null)
+              ? Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.location_on,
+                      color: Colors.blue[800],
+                      size: 40.0,
+                    ),
+                    SizedBox(width: 10.0),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          place.title,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: Colors.blue[900], fontSize: 20.0),
+                        ),
+                        Text(
+                          place.subTitle,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(color: Colors.grey, fontSize: 16.0),
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              : Text(
+                  'Add Location',
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20.0,
+                  ),
+                ),
         ),
       );
 }

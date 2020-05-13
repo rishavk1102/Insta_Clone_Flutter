@@ -1,9 +1,9 @@
 class Place {
   String title;
-  String sub_title;
+  String subTitle;
 
   Place(
     this.title,
-    this.sub_title,
+    this.subTitle,
   );
 }
