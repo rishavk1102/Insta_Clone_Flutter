@@ -59,6 +59,7 @@ class _PostEditState extends State<PostEdit> {
                 currentUser.id,
                 captionController.text,
                 selectedImages,
+                place,
               )
                   .then((PostData currentPost) {
                 print(currentPost.postId);

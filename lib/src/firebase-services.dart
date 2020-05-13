@@ -10,6 +10,7 @@ import 'package:intl/intl.dart' as intl;
 
 import './models/user.dart';
 import './models/post_data.dart';
+import './models/place.dart';
 
 class FirebaseServices {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -153,7 +154,11 @@ class FirebaseServices {
 
   //  ADDS THE POST DATA TO REALTIME DATABASE
   Future<PostData> uploadPostdata(
-      String uid, String caption, List<String> selecetedImages) async {
+    String uid,
+    String caption,
+    List<String> selecetedImages,
+    Place location,
+  ) async {
     PostData postData;
     await uploadPostImage(uid, selecetedImages)
         .then((List<String> downloadUrls) async {
@@ -166,6 +171,7 @@ class FirebaseServices {
         postTime: intl.DateFormat('kk:mm:ss:EEE:d:MMM').format(DateTime.now()),
         totalComment: 0,
         totalLike: 0,
+        location: location,
       );
 
       await postRef.set(postData.PostDataToMap());

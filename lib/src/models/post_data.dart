@@ -1,5 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 
+import './place.dart';
+
 class PostData {
   String postId;
   List<String> gallery;
@@ -7,6 +9,7 @@ class PostData {
   int totalComment;
   String postTime;
   String caption;
+  Place location;
 
   PostData({
     this.postId,
@@ -15,6 +18,7 @@ class PostData {
     this.totalComment,
     this.postTime,
     this.caption,
+    this.location,
   });
 
   Map<String, dynamic> PostDataToMap() {
@@ -29,6 +33,8 @@ class PostData {
       'totalComment': this.totalComment,
       'postTime': this.postTime,
       'caption': this.caption,
+      'locationTitle': this.location.title,
+      'locationSubTitle': this.location.subTitle,
     };
   }
 
@@ -39,5 +45,7 @@ class PostData {
     this.totalComment = map.value['totalComment'];
     this.postTime = map.value['postTime'];
     this.caption = map.value['caption'];
+    this.location.title = map.value['locationTitle'];
+    this.location.subTitle = map.value['locationSubTitle'];
   }
 }
