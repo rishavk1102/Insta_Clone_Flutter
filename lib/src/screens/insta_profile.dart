@@ -208,25 +208,6 @@ class _InstaProfileState extends State<InstaProfile>
           ),
         ),
       );
-
-  // Widget nestedScrollView() => NestedScrollView(
-  //       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) =>
-  //           <Widget>[
-  //         SliverToBoxAdapter(
-  //           child: userInfo(),
-  //         ),
-  //       ],
-  //       body: TabBarView(
-  //         children: <Widget>[
-  //           Center(
-  //             child: Text('Tab1'),
-  //           ),
-  //           Center(
-  //             child: Text('Tab2'),
-  //           ),
-  //         ],
-  //       ),
-  //     );
 }
 
 class CustomSliverDelegate extends SliverPersistentHeaderDelegate {

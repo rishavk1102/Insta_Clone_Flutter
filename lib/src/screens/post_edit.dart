@@ -22,9 +22,12 @@ class _PostEditState extends State<PostEdit> {
   List<String> selectedImages = [];
   FirebaseServices _firebaseServices = FirebaseServices();
 
+  bool _currentUserController = false;
+
   var captionController = TextEditingController();
 
   void _getCurrentUser() {
+    _currentUserController = true;
     _firebaseServices.getCurrentUserData().then((value) {
       this.currentUser = value;
       setState(() {});
@@ -39,7 +42,7 @@ class _PostEditState extends State<PostEdit> {
 
   @override
   Widget build(BuildContext context) {
-    _getCurrentUser();
+    if (!_currentUserController) _getCurrentUser();
 
     selectedImages = ModalRoute.of(context).settings.arguments as List<String>;
 
