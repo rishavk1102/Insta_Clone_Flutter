@@ -176,12 +176,8 @@ class FirebaseServices {
 
       await postRef.set(postData.PostDataToMap());
 
-      _database
-          .child('Users')
-          .child(uid)
-          .once()
-          .then((DataSnapshot dataSnapshot) async {
-            User currentUser = User.MapToUser(dataSnapshot);
+      getCurrentUserData()
+          .then((User currentUser) async {
             currentUser.posts = currentUser.posts + 1;
             await updateUserInfo(currentUser);
           });

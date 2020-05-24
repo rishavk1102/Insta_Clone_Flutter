@@ -224,11 +224,11 @@ class SelectLocation extends StatefulWidget {
 class _SelectLocationState extends State<SelectLocation> {
   List<Place> _placesList = [];
   List<Place> _suggestedList = [
-    Place('Jamshedpur', 'Jamshedpur'),
-    Place('Berhampur', 'Berhampur'),
-    Place('New-York', 'New-York'),
-    Place('Jublee Park', 'Jamshedpur'),
-    Place('Chhota Govindpur', 'Jamshedpur'),
+    Place(title: 'Jamshedpur', subTitle: 'Jamshedpur'),
+    Place(title: 'Berhampur', subTitle: 'Berhampur'),
+    Place(title: 'New-York', subTitle: 'New-York'),
+    Place(title: 'Jublee Park', subTitle: 'Jamshedpur'),
+    Place(title: 'Chhota Govindpur', subTitle: 'Jamshedpur'),
   ];
   var _locationController = TextEditingController();
 
@@ -251,8 +251,12 @@ class _SelectLocationState extends State<SelectLocation> {
     final List predictions = json.decode(response.body)['predictions'];
 
     for (var i = 0; i < predictions.length; i++) {
-      _placesList.add(Place(predictions[i]['description'],
-          predictions[i]['structured_formatting']['secondary_text']));
+      _placesList.add(
+        Place(
+          title: predictions[i]['description'],
+          subTitle: predictions[i]['structured_formatting']['secondary_text'],
+        ),
+      );
     }
     print(_placesList[4].subTitle);
 

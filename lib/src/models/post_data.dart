@@ -9,7 +9,7 @@ class PostData {
   int totalComment;
   String postTime;
   String caption;
-  Place location;
+  Place location = Place();
 
   PostData({
     this.postId,
@@ -23,9 +23,8 @@ class PostData {
 
   Map<String, dynamic> PostDataToMap() {
     Map<String, String> urls = {};
-    for (var i = 0 ; i < gallery.length ; i++) 
-      urls['post${i+1}'] = gallery[i];
-    
+    for (var i = 0; i < gallery.length; i++) urls['post${i + 1}'] = gallery[i];
+
     return <String, dynamic>{
       'postId': this.postId,
       'gallery': urls,
@@ -33,8 +32,8 @@ class PostData {
       'totalComment': this.totalComment,
       'postTime': this.postTime,
       'caption': this.caption,
-      'locationTitle': this.location.title,
-      'locationSubTitle': this.location.subTitle,
+      'locationTitle': (this.location != null) ? this.location.title : '',
+      'locationSubTitle': (this.location != null) ? this.location.subTitle : '',
     };
   }
 
