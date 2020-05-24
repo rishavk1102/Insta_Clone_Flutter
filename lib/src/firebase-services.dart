@@ -176,12 +176,28 @@ class FirebaseServices {
 
       await postRef.set(postData.PostDataToMap());
 
-      getCurrentUserData()
-          .then((User currentUser) async {
-            currentUser.posts = currentUser.posts + 1;
-            await updateUserInfo(currentUser);
-          });
+      getCurrentUserData().then((User currentUser) async {
+        currentUser.posts = currentUser.posts + 1;
+        await updateUserInfo(currentUser);
+      });
     });
     return postData;
+  }
+
+  //  GETS POST LIST
+  Future<List<PostData>> getPostList(String uid) async {
+    List<PostData> list = [];
+    await _database
+        .child('Posts')
+        .child(uid)
+        .once()
+        .then((DataSnapshot dataSnapshot) {
+      Map<dynamic, dynamic> data = dataSnapshot.value;
+      data.forEach((key, value) {
+        list.add(PostData.mapToPostData(value));
+      });
+      print('PostList : $list');
+    });
+    return list;
   }
 }

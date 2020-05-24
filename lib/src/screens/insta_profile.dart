@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../widgets/user_image_with_plus_icon.dart';
 import '../utils/ui_image.dart';
+import '../firebase-services.dart';
+import '../models/user.dart';
+import '../widgets/waiting_widget.dart';
+import '../models/post_data.dart';
 
 class InstaProfile extends StatefulWidget {
   @override
@@ -13,6 +18,30 @@ class _InstaProfileState extends State<InstaProfile>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollController;
+
+  User currentUser;
+  List<PostData> postList = [];
+  FirebaseServices _firebaseServices = FirebaseServices();
+
+  bool _currentuserController = false;
+  bool _postListController = false;
+
+  void _getPostList() {
+    _postListController = true;
+    _firebaseServices.getPostList(currentUser.id).then((value) {
+      postList = value;
+      print(postList);
+      setState(() {});
+    });
+  }
+
+  void _getCurrentUser() {
+    _currentuserController = true;
+    _firebaseServices.getCurrentUserData().then((User user) {
+      this.currentUser = user;
+      setState(() {});
+    });
+  }
 
   @override
   void initState() {
@@ -30,31 +59,35 @@ class _InstaProfileState extends State<InstaProfile>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(),
-      body: RefreshIndicator(
-        onRefresh: () async {},
-        child: NestedScrollView(
-          controller: _scrollController,
-          headerSliverBuilder: (BuildContext context, bool boxIsScrolled) =>
-              <Widget>[
-            SliverToBoxAdapter(child: userInfo()),
-            SliverPersistentHeader(
-              delegate: CustomSliverDelegate(_tabController),
-              pinned: true,
-              floating: true,
-            )
-          ],
-          body: TabBarView(
-            controller: _tabController,
-            children: <Widget>[
-              postGridView(),
-              taggedGridView(),
-            ],
-          ),
-        ),
-      ),
-    );
+    if (!_currentuserController) _getCurrentUser();
+
+    return (currentUser == null)
+        ? WaitingWidget()
+        : Scaffold(
+            appBar: appBar(),
+            body: RefreshIndicator(
+              onRefresh: () async {},
+              child: NestedScrollView(
+                controller: _scrollController,
+                headerSliverBuilder:
+                    (BuildContext context, bool boxIsScrolled) => <Widget>[
+                  SliverToBoxAdapter(child: userInfo()),
+                  SliverPersistentHeader(
+                    delegate: CustomSliverDelegate(_tabController),
+                    pinned: true,
+                    floating: true,
+                  )
+                ],
+                body: TabBarView(
+                  controller: _tabController,
+                  children: <Widget>[
+                    postGridView(),
+                    taggedGridView(),
+                  ],
+                ),
+              ),
+            ),
+          );
   }
 
   Widget appBar() => AppBar(
@@ -62,7 +95,7 @@ class _InstaProfileState extends State<InstaProfile>
         title: Row(
           children: <Widget>[
             Text(
-              '_sarita_',
+              currentUser.userName,
               style: TextStyle(),
             ),
             SizedBox(width: 4.0),
@@ -115,14 +148,14 @@ class _InstaProfileState extends State<InstaProfile>
           children: <Widget>[
             Row(
               children: <Widget>[
-                UserImageWithPlusIcon(),
+                UserImageWithPlusIcon(url: currentUser.imageUrl),
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      stats('Post', 20),
-                      stats('Followers', 406),
-                      stats('Following', 111),
+                      stats('Post', currentUser.posts),
+                      stats('Followers', currentUser.followers),
+                      stats('Following', currentUser.following),
                     ],
                   ),
                 ),
@@ -130,7 +163,7 @@ class _InstaProfileState extends State<InstaProfile>
             ),
             SizedBox(height: 16.0),
             Text(
-              'Sarita Singh',
+              currentUser.firstName + ' ' + currentUser.lastName,
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -139,7 +172,12 @@ class _InstaProfileState extends State<InstaProfile>
             ),
             SizedBox(height: 4.0),
             Text(
-              '''Most good programmers do programming not because they expect to get paid or get adulation by the public, but because it is fun to program.''',
+              currentUser.website,
+              style: TextStyle(color: Colors.blue[900]),
+            ),
+            SizedBox(height: 4.0),
+            Text(
+              currentUser.bio,
               style: TextStyle(),
             ),
             Container(
@@ -172,24 +210,56 @@ class _InstaProfileState extends State<InstaProfile>
     );
   }
 
-  Widget postGridView() => GridView.builder(
-        itemCount: 50,
-        padding: EdgeInsets.only(top: 4.0),
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 3.0,
-          mainAxisSpacing: 3.0,
-        ),
-        itemBuilder: (BuildContext context, int index) => Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage(UiImage.man2),
+  Widget postGridView() {
+    if (!_postListController) _getPostList();
+
+    return (postList == null)
+        ? Container()
+        : GridView.builder(
+            itemCount: currentUser.posts,
+            padding: EdgeInsets.only(top: 4.0),
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 3.0,
+              mainAxisSpacing: 3.0,
             ),
-          ),
-        ),
-      );
+            // itemBuilder: (BuildContext context, int index) => Container(
+            //   decoration: BoxDecoration(
+            //     image: DecorationImage(
+            //       fit: BoxFit.cover,
+            //       image: AssetImage(UiImage.man2),
+            //     ),
+            //   ),
+            // ),
+            itemBuilder: (BuildContext context, int index) {
+              return CachedNetworkImage(
+                imageUrl: postList[index].gallery[0],
+                fit: BoxFit.cover,
+                placeholder: (context, url) => Stack(
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/placeholder.png',
+                      fit: BoxFit.cover,
+                    ),
+                    Center(child: CircularProgressIndicator()),
+                  ],
+                ),
+                imageBuilder:
+                    (BuildContext context, ImageProvider imageProvider) =>
+                        Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+  }
 
   Widget taggedGridView() => GridView.builder(
         itemCount: 4,

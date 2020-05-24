@@ -9,7 +9,7 @@ class PostData {
   int totalComment;
   String postTime;
   String caption;
-  Place location = Place();
+  Place location;
 
   PostData({
     this.postId,
@@ -37,14 +37,21 @@ class PostData {
     };
   }
 
-  PostData MapToPostData(DataSnapshot map) {
-    this.postId = map.value['postId'];
-    this.gallery = map.value['gallery'] as List<String>;
-    this.totalLike = map.value['totalLike'];
-    this.totalComment = map.value['totalComment'];
-    this.postTime = map.value['postTime'];
-    this.caption = map.value['caption'];
-    this.location.title = map.value['locationTitle'];
-    this.location.subTitle = map.value['locationSubTitle'];
+  PostData.mapToPostData(Map<dynamic, dynamic> map) {
+    gallery = [];
+
+    this.postId = map['postId'];
+    //this.gallery = map['gallery'] as List<String>;
+    this.totalLike = map['totalLike'];
+    this.totalComment = map['totalComment'];
+    this.postTime = map['postTime'];
+    this.caption = map['caption'];
+    this.location = Place(
+      title: map['locationTitle'],
+      subTitle: map['locationSubTitle'],
+    );
+    map['gallery'].forEach((key, value) {
+      this.gallery.add(value);
+    });
   }
 }
