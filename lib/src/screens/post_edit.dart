@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 
@@ -8,6 +7,7 @@ import '../models/user.dart';
 import './select_location.dart';
 import '../models/post_data.dart';
 import '../models/place.dart';
+import './insta_home.dart';
 
 class PostEdit extends StatefulWidget {
   static const routeName = '/post-edit';
@@ -24,6 +24,13 @@ class _PostEditState extends State<PostEdit> {
 
   var captionController = TextEditingController();
 
+  void _getCurrentUser() {
+    _firebaseServices.getCurrentUserData().then((value) {
+      this.currentUser = value;
+      setState(() {});
+    });
+  }
+
   @override
   void dispose() {
     captionController.dispose();
@@ -32,9 +39,7 @@ class _PostEditState extends State<PostEdit> {
 
   @override
   Widget build(BuildContext context) {
-    _firebaseServices
-        .getCurrentUserData()
-        .then((value) => this.currentUser = value);
+    _getCurrentUser();
 
     selectedImages = ModalRoute.of(context).settings.arguments as List<String>;
 
@@ -63,6 +68,7 @@ class _PostEditState extends State<PostEdit> {
               )
                   .then((PostData currentPost) {
                 print(currentPost.postId);
+                Navigator.of(context).popAndPushNamed(InstaHome.routeName);
               });
             },
           )
@@ -91,7 +97,9 @@ class _PostEditState extends State<PostEdit> {
             padding: const EdgeInsets.all(15.0),
             child: CircleAvatar(
               radius: 30.0,
-              backgroundImage: NetworkImage(currentUser.imageUrl),
+              backgroundImage: (currentUser != null)
+                  ? NetworkImage(currentUser.imageUrl)
+                  : AssetImage('assets/images/child.jpg'),
             ),
           ),
           Expanded(
